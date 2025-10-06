@@ -291,3 +291,16 @@ C:\Users\lab_services_student\Desktop\ABCRetailersST10356144\obj\Release\net9.0\
 C:\Users\lab_services_student\Desktop\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.pdb
 C:\Users\lab_services_student\Desktop\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.genruntimeconfig.cache
 C:\Users\lab_services_student\Desktop\ABCRetailersST10356144\obj\Release\net9.0\ref\ABCRetailersST10356144.dll
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.dll
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\refint\ABCRetailersST10356144.dll
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.pdb
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.csproj.AssemblyReference.cache
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\rpswa.dswa.cache.json
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.AssemblyInfoInputs.cache
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.AssemblyInfo.cs
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.csproj.CoreCompileInputs.cache
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.RazorAssemblyInfo.cache
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.RazorAssemblyInfo.cs
+C:\Users\lab_services_student\Desktop\IIEMSA_ST10356144_CLDV6212POE\ABCRetailersST10356144\obj\Release\net9.0\ABCRetailersST10356144.sourcelink.json

@@ -1,19 +1,29 @@
 using System.Globalization;
 using ABCRetailersST10356144.Services;
+using Microsoft.AspNetCore.Http.Features;
 
-namespace ABCRetailersST10356144
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            //Register Azure Storage Service
-            builder.Services.AddScoped<IAzureStorageService, AzureStorageService>();
+            //Azure Functions
+            builder.Services.AddHttpClient("Functions", (sp, client) =>
+            {
+                var cfg = sp.GetRequiredService<IConfiguration>();
+                var baseUrl = cfg["Functions:BaseUrl"] ?? throw new InvalidOperationException("Functions:BaseUrl missing");
+                client.BaseAddress = new Uri(baseUrl.TrimEnd('/') + "/api/"); // adjust if your Functions don't use /api
+                client.Timeout = TimeSpan.FromSeconds(100);
+            });
+
+            //Register Azure Function Service
+            builder.Services.AddScoped<IFunctionsApi, FunctionsApiClient>();
+
+            builder.Services.Configure<FormOptions>(o =>
+            {
+                o.MultipartBodyLengthLimit = 50 * 1024 * 1024; // 50 MB
+            });
 
             //Add logging
             builder.Services.AddLogging();
@@ -29,7 +39,6 @@ namespace ABCRetailersST10356144
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -43,6 +52,3 @@ namespace ABCRetailersST10356144
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
-        }
-    }
-}

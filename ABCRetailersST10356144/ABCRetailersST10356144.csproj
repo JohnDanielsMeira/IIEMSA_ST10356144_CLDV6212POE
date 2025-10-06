@@ -14,4 +14,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ABCRetailersST10356144.Functions\ABCRetailersST10356144.Functions.csproj" />
+  </ItemGroup>
+
 </Project>

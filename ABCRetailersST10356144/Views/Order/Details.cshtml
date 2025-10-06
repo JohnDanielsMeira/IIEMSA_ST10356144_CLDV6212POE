@@ -1,4 +1,5 @@
 ﻿<!-- Views/Order/Details.cshtml -->
+@using ABCRetailersST10356144.Models
 @model ABCRetailersST10356144.Models.Order
 @{
     ViewData["Title"] = "Order Details";
@@ -7,7 +8,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="fas fa-receipt"></i> Order Details</h2>
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.RowKey" class="btn btn-primary">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
             <i class="fas fa-edit"></i> Edit
         </a>
         <a asp-action="Index" class="btn btn-secondary">
@@ -26,37 +27,23 @@
                 <div class="row">
                     <div class="col-md-6">
                         <p><strong>Order ID:</strong></p>
-                        <p class="text-muted">@Model.OrderID</p>
+                        <p class="text-muted"><code>@Model.Id</code></p>
 
                         <p><strong>Customer:</strong></p>
-                        <p class="text-muted">@Model.Username</p>
+                        <p class="text-muted">@Model.CustomerID</p>
 
                         <p><strong>Product:</strong></p>
-                        <p class="text-muted">@Model.ProductName</p>
+                        <p class="text-muted">@(!string.IsNullOrWhiteSpace(Model.ProductName) ? Model.ProductName : Model.ProductID)</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Order Date:</strong></p>
-                        <p class="text-muted">@Model.OrderDate.ToString("MMMM dd, yyyy")</p>
+                        <p><strong>Order Date (Local):</strong></p>
+                        <p class="text-muted">@FormatLocal(Model.OrderDate)</p>
 
                         <p><strong>Quantity:</strong></p>
                         <p class="text-muted">@Model.Quantity</p>
 
                         <p><strong>Status:</strong></p>
-                        <p>
-                            @{
-                                string GetStatusBadgeClass(string status) => status?.ToLower() switch
-                                {
-                                    "submitted" => "primary",
-                                    "processing" => "info",
-                                    "completed" => "success",
-                                    "cancelled" => "danger",
-                                    _ => "secondary"
-                                };
-                            }
-                            <span class="badge bg-@(GetStatusBadgeClass(Model.Status)) fs-6">
-                                @Model.Status
-                            </span>
-                        </p>
+                        <p><span class="badge bg-@Badge(Model.Status) fs-6">@Model.Status</span></p>
                     </div>
                 </div>
             </div>
@@ -69,36 +56,30 @@
                 <h6 class="card-title mb-0">Pricing Details</h6>
             </div>
             <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <span>Unit Price:</span>
-                    <span>@Model.UnitPrice.ToString("C")</span>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <span>Quantity:</span>
-                    <span>@Model.Quantity</span>
-                </div>
+                <div class="d-flex justify-content-between"><span>Unit Price:</span><span>@Model.UnitPrice.ToString("C")</span></div>
+                <div class="d-flex justify-content-between"><span>Quantity:</span><span>@Model.Quantity</span></div>
                 <hr>
                 <div class="d-flex justify-content-between">
-                    <strong>Total Price:</strong>
+                    <strong>Total:</strong>
                     <strong class="text-success">@Model.TotalPrice.ToString("C")</strong>
                 </div>
             </div>
         </div>
-
-        <div class="card mt-3">
-            <div class="card-header">
-                <h6 class="card-title mb-0">System Information</h6>
-            </div>
-            <div class="card-body">
-                <p><strong>Created:</strong></p>
-                <p class="text-muted small">@Model.Timestamp?.ToString("MMM dd, yyyy HH:mm")</p>
-
-                <p><strong>Customer ID:</strong></p>
-                <p class="text-muted small">@Model.CustomerID</p>
-
-                <p><strong>Product ID:</strong></p>
-                <p class="text-muted small">@Model.ProductID</p>
-            </div>
-        </div>
     </div>
 </div>
+
+@functions {
+    // Null-safe date formatter for DateTimeOffset?
+    string FormatLocal(DateTimeOffset? dto)
+        => dto.HasValue ? dto.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm") : "-";
+
+    // Enum-based badge color
+    string Badge(OderStatus status) => status switch
+    {
+        OderStatus.Submitted => "primary",
+        OderStatus.Processing => "info",
+        OderStatus.Completed => "success",
+        OderStatus.Cancelled => "danger",
+        _ => "secondary"
+    };
+}

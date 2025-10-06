@@ -4,8 +4,17 @@ using Azure.Data.Tables;
 
 namespace ABCRetailersST10356144.Models
 {
+    public enum OderStatus
+    {
+        Submitted,      //First created
+        Processing,     //Company opens the order
+        Completed,      //Order is delivered
+        Cancelled       //Order is cancelled
+    }
+
     public class Order : ITableEntity
     {
+
         public string PartitionKey { get; set; } = "Order";
         public string RowKey { get; set; } = Guid.NewGuid().ToString();
         public DateTimeOffset? Timestamp { get; set; }
@@ -13,6 +22,9 @@ namespace ABCRetailersST10356144.Models
 
         [Display(Name = "Order ID")]
         public string OrderID => RowKey;
+
+        [Display(Name = "Order ID")]
+        public string Id { get; set; } = string.Empty; // set from Function response
 
         [Required]
         [Display(Name = "Customer")]
@@ -30,17 +42,15 @@ namespace ABCRetailersST10356144.Models
 
         [Required]
         [Display(Name = "Order Date")]
-        [DataType(DataType.Date)]
-        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset? OrderDate { get; set; }
 
         [Required]
         [Display(Name = "Quantity")]
         [Range(1, int.MaxValue, ErrorMessage = "Quantity cannot be less than 1")]
         public int Quantity { get; set; }
 
-        [Display(Name = "Unit price")]
-        [DataType(DataType.Currency)]
-        public double UnitPrice { get; set; }
+        [Display(Name = "Unit Price"), DataType(DataType.Currency)]
+        public decimal UnitPrice { get; set; }
 
         [Display(Name = "Total price")]
         [DataType(DataType.Currency)]
@@ -48,14 +58,6 @@ namespace ABCRetailersST10356144.Models
 
         [Required]
         [Display(Name = "Status")]
-        public string Status { get; set; } = "Submitted";
-    }
-
-    public enum OderStatus
-    {
-        Submitted,      //First created
-        Processing,     //Company opens the order
-        Completed,      //Order is delivered
-        Cancelled       //Order is cancelled
+        public OderStatus Status { get; set; } = OderStatus.Submitted;
     }
 }

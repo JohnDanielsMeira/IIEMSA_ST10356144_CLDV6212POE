@@ -69,12 +69,8 @@
 
             <div class="form-group mb-3">
                 <label asp-for="Status" class="form-label"></label>
-                <select asp-for="Status" class="form-select">
-                    <option value="Pending">Pending</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                </select>
+                @* Works if Order.Status is an enum *@
+                <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<OderStatus>()"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
 
@@ -110,7 +106,7 @@
 
                 <p>
                     <strong>Current Status:</strong><br />
-                    <span class="badge bg-@(GetStatusBadgeClass(Model.Status))">@Model.Status</span>
+                    <span class="badge bg-@Badge(Model.Status)">@Model.Status</span>
                 </p>
             </div>
         </div>
@@ -118,17 +114,14 @@
 </div>
 
 @functions {
-    string GetStatusBadgeClass(string status)
+    string Badge(OderStatus status) => status switch
     {
-        return status?.ToLower() switch
-        {
-            "submitted" => "primary",
-            "processing" => "info",
-            "completed" => "success",
-            "cancelled" => "danger",
-            _ => "secondary"
-        };
-    }
+        OderStatus.Submitted => "primary",
+        OderStatus.Processing => "info",
+        OderStatus.Completed => "success",
+        OderStatus.Cancelled => "danger",
+        _ => "secondary"
+    };
 }
 
 @section Scripts {

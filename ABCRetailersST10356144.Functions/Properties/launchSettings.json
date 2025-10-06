@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ABCRetailersST10356144.Functions": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7157",
+      "launchBrowser": false
+    }
+  }
+}
