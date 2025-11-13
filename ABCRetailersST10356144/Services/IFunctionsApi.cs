@@ -7,6 +7,7 @@ public interface IFunctionsApi
     // Customers
     Task<List<Customer>> GetCustomersAsync();
     Task<Customer?> GetCustomerAsync(string id);
+    Task<Customer?> GetCustomerByUsernameAsync(string username); //Added for username lookup
     Task<Customer> CreateCustomerAsync(Customer c);
     Task<Customer> UpdateCustomerAsync(string id, Customer c);
     Task DeleteCustomerAsync(string id);

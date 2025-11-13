@@ -1,0 +1,59 @@
+﻿@model List<ABCRetailersST10356144.Models.Order>
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<h2 class="mb-4">My Orders</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">You haven't placed any orders yet</div>
+}
+else
+{
+    <table class="table table-striped table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Order Date (Local)</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.ProductName</td>
+                    <td>@order.OrderDate.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@order.Quantity</td>
+                    <td>@order.TotalPrice.ToString("C")</td>
+                    <td>
+                        @switch (order.Status)
+                        {
+                            case ABCRetailersST10356144.Models.OderStatus.Submitted:
+                                <span class="badge bg-secondary">Submitted</span>
+                                ;
+                                break;
+                            case ABCRetailersST10356144.Models.OderStatus.Processing:
+                                <span class="badge bg-primary">Processing</span>
+                                ;
+                                break;
+                            case ABCRetailersST10356144.Models.OderStatus.Completed:
+                                <span class="badge bg-success">Completed</span>
+                                ;
+                                break;
+                            case ABCRetailersST10356144.Models.OderStatus.Cancelled:
+                                <span class="badge bg-danger">Cancelled</span>
+                                ;
+                                break;
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

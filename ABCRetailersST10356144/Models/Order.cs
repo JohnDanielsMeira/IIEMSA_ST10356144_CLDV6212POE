@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Azure;
 using Azure.Data.Tables;
 
@@ -17,7 +18,11 @@ namespace ABCRetailersST10356144.Models
 
         public string PartitionKey { get; set; } = "Order";
         public string RowKey { get; set; } = Guid.NewGuid().ToString();
+
+        [NotMapped]
         public DateTimeOffset? Timestamp { get; set; }
+
+        [NotMapped]
         public ETag ETag { get; set; }
 
         [Display(Name = "Order ID")]
@@ -42,7 +47,7 @@ namespace ABCRetailersST10356144.Models
 
         [Required]
         [Display(Name = "Order Date")]
-        public DateTimeOffset? OrderDate { get; set; }
+        public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.UtcNow;
 
         [Required]
         [Display(Name = "Quantity")]
@@ -54,7 +59,7 @@ namespace ABCRetailersST10356144.Models
 
         [Display(Name = "Total price")]
         [DataType(DataType.Currency)]
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
 
         [Required]
         [Display(Name = "Status")]

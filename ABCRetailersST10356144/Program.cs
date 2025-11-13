@@ -1,26 +1,62 @@
 using System.Globalization;
+using ABCRetailersST10356144.Data;
 using ABCRetailersST10356144.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 
 
-            var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpContextAccessor();
 
-            //Azure Functions
-            builder.Services.AddHttpClient("Functions", (sp, client) =>
-            {
-                var cfg = sp.GetRequiredService<IConfiguration>();
-                var baseUrl = cfg["Functions:BaseUrl"] ?? throw new InvalidOperationException("Functions:BaseUrl missing");
-                client.BaseAddress = new Uri(baseUrl.TrimEnd('/') + "/api/"); // adjust if your Functions don't use /api
-                client.Timeout = TimeSpan.FromSeconds(100);
-            });
+//EF Core: Azure SQL Database
+builder.Services.AddDbContext<AuthDbContext>(options =>
+{
+    var connStr = builder.Configuration.GetConnectionString("AuthDatabase")
+                  ?? throw new InvalidOperationException("AuthDatabase connection string missing");
+    options.UseSqlServer(connStr);
+});
 
-            //Register Azure Function Service
-            builder.Services.AddScoped<IFunctionsApi, FunctionsApiClient>();
+//Azure Functions
+builder.Services.AddHttpClient("Functions", (sp, client) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var baseUrl = cfg["Functions:BaseUrl"]
+                  ?? throw new InvalidOperationException("Functions:BaseUrl missing in config");
+    client.BaseAddress = new Uri(baseUrl.TrimEnd('/') + "/api/");
+    client.Timeout = TimeSpan.FromSeconds(100);
+});
 
-            builder.Services.Configure<FormOptions>(o =>
+//Register Azure Function Service
+builder.Services.AddScoped<IFunctionsApi, FunctionsApiClient>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login/Index";
+        options.AccessDeniedPath = "/Login/AccessDenied";
+        options.Cookie.Name = "ABCAuthCookie";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.SlidingExpiration = true;
+    });
+
+//Session Setup
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = "ABCSession";
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+});
+
+builder.Services.Configure<FormOptions>(o =>
             {
                 o.MultipartBodyLengthLimit = 50 * 1024 * 1024; // 50 MB
             });
@@ -45,6 +81,8 @@ using Microsoft.AspNetCore.Http.Features;
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+app.UseSession();
+app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

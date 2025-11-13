@@ -1,9 +1,11 @@
 ﻿using ABCRetailersST10356144.Models;
 using ABCRetailersST10356144.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABCRetailersST10356144.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
         private readonly IFunctionsApi _api;

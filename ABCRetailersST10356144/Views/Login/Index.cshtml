@@ -1,0 +1,78 @@
+﻿@model ABCRetailersST10356144.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-dark text-white text-center">
+                    <h4><i class="fas fa-user-lock"></i> Login</h4>
+                </div>
+                <div class="card-body">
+
+                    @* Validation summary *@
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    @* Display messages *@
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["Error"]</div>
+                    }
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["Success"]</div>
+                    }
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Error</div>
+                    }
+
+                    <form asp-action="Index" asp-controller="Login" method="post">
+                        <div class="form-group mb-3">
+                            <label asp-for="Username"></label>
+                            <input asp-for="Username" class="form-control" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control" type="password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <small class="form-text text-muted">Password must be re-entered if there are errors.</small>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Role"></label>
+                            <select asp-for="Role" class="form-control">
+                                <option value="">-- Select Role --</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Customer">Customer</option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+
+                    <div class="mt-3 text-center">
+                        <p>
+                            Don't have an account?
+                            <a asp-action="Register" asp-controller="Login" class="fw-bold">Register</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card-footer text-center text-muted small">
+                    &copy; 2025 - ABC Retailers -
+                    <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

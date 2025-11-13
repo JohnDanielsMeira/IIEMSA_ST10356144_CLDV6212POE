@@ -1,9 +1,11 @@
 ﻿using ABCRetailersST10356144.Models;
 using ABCRetailersST10356144.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABCRetailersST10356144.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IFunctionsApi _api;
@@ -15,19 +17,25 @@ namespace ABCRetailersST10356144.Controllers
             _logger = logger;
         }
 
+        //Both Admin and Customer can view products
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Index()
         {
             var products = await _api.GetProductsAsync();
             return View(products);
         }
 
+        //Only Admin can create a product
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
+        //Only Admin can POST a product
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(Product product, IFormFile? imageFile)
         {
             if (!ModelState.IsValid) return View(product);
@@ -45,6 +53,8 @@ namespace ABCRetailersST10356144.Controllers
             }
         }
 
+        //Only admin can edit a product
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrWhiteSpace(id)) return NotFound();
@@ -52,8 +62,10 @@ namespace ABCRetailersST10356144.Controllers
             return product is null ? NotFound() : View(product);
         }
 
+        //Only admin can POST an edit
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Product product, IFormFile? imageFile)
         {
             if (!ModelState.IsValid) return View(product);
@@ -71,6 +83,8 @@ namespace ABCRetailersST10356144.Controllers
             }
         }
 
+        //Only admin can Delete a product
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {

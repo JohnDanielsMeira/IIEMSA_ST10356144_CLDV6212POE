@@ -22,10 +22,10 @@ namespace ABCRetailersST10356144.Models
         [Display(Name = "Description")]
         public string Description { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Price is required")]
-        [Display(Name = "Price")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
-        public double Price { get; set; }
+        [Required, Display(Name = "Price")]
+        [Range(typeof(decimal), "0.01", "79228162514264337593543950335",
+               ErrorMessage = "Price must be greater than 0")]
+        public decimal Price { get; set; }
 
         [Required]
         [Display(Name = "Stock Available")]

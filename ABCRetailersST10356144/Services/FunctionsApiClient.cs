@@ -60,6 +60,15 @@ public class FunctionsApiClient : IFunctionsApi
         }).ToList();
     }
 
+    //Match by Username instead of email
+    public async Task<Customer?> GetCustomerByUsernameAsync(string username)
+    {
+        var customers = await GetCustomersAsync();
+        return customers.FirstOrDefault(c =>
+            c.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+    }
+
+
     public async Task<Customer?> GetCustomerAsync(string id)
     {
         var resp = await _http.GetAsync($"{CustomersRoute}/{id}");
@@ -140,7 +149,7 @@ public class FunctionsApiClient : IFunctionsApi
             RowKey = dto.Id,
             ProductName = dto.ProductName,
             Description = dto.Description,
-            Price = (double)dto.Price,
+            Price = dto.Price, // dto.Price is decimal
             AvailableStock = dto.AvailableStock,
             ImageURL = dto.ImageURL
         }).ToList();
@@ -158,7 +167,7 @@ public class FunctionsApiClient : IFunctionsApi
             RowKey = dto.Id,
             ProductName = dto.ProductName,
             Description = dto.Description,
-            Price = (double)dto.Price,
+            Price = dto.Price, // dto.Price is decimal
             AvailableStock = dto.AvailableStock,
             ImageURL = dto.ImageURL
         };
