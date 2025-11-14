@@ -1,0 +1,2 @@
+﻿# Ignore local settings
+ABCRetailersST10356144/bin/Debug/net8.0/local.settings.json

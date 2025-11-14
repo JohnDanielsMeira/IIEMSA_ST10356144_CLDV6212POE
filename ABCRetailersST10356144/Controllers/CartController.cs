@@ -27,7 +27,7 @@ namespace ABCRetailersST10356144.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var username = User.Identity?.Name;
+            var username = User.FindFirst("Username")?.Value;
             if (string.IsNullOrEmpty(username))
                 return RedirectToAction("Index", "Login");
 
@@ -57,7 +57,7 @@ namespace ABCRetailersST10356144.Controllers
 
         public async Task<IActionResult> Add(string productID)
         {
-            var username = User.Identity?.Name;
+            var username = User.FindFirst("Username")?.Value;
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(productID))
                 return RedirectToAction("Index", "Product");
 
@@ -90,7 +90,7 @@ namespace ABCRetailersST10356144.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout()
         {
-            var username = User.Identity?.Name;
+            var username = User.FindFirst("Username")?.Value;
             if (string.IsNullOrEmpty(username))
                 return RedirectToAction("Index", "Login");
 
@@ -133,7 +133,7 @@ namespace ABCRetailersST10356144.Controllers
         [HttpPost]
         public async Task<IActionResult> Remove (string productID)
         {
-            var username = User.Identity?.Name;
+            var username = User.FindFirst("Username")?.Value;
             if (string.IsNullOrEmpty(username))
                 return RedirectToAction("Index");
 
@@ -154,7 +154,7 @@ namespace ABCRetailersST10356144.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateQuantities(List<CartItemViewModel> items)
         {
-            var username = User.Identity?.Name;
+            var username = User.FindFirst("Username")?.Value;
             if (string.IsNullOrEmpty(username))
                 return RedirectToAction("Index");
 

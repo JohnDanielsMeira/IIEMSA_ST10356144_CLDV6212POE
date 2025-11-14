@@ -1,11 +1,10 @@
 using System.Diagnostics;
-using System.Threading.Tasks;
 using ABCRetailersST10356144.Models;
 using ABCRetailersST10356144.Models.ViewModels;
 using ABCRetailersST10356144.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ABCRetailersST10356144.Controllers
 {
@@ -19,13 +18,23 @@ namespace ABCRetailersST10356144.Controllers
             _api = api;
             _logger = logger;
         }
-        //Main home page (Public)
+
+        // Public Home Page / Redirect for authenticated users
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                    return RedirectToAction("AdminDashboard");
+                else if (User.IsInRole("Customer"))
+                    return RedirectToAction("CustomerDashboard");
+            }
+
+            // Public home page for unauthenticated users
             try
             {
-                var products = await _api.GetProductsAsync() ?? new List<Product>();
+                var products = _api.GetProductsAsync().Result ?? new List<Product>();
 
                 var vm = new HomeViewModel
                 {
@@ -37,14 +46,13 @@ namespace ABCRetailersST10356144.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to load dashboard data from Functions API.");
-                TempData["Error"] = "Could not load dashboard data. Please try again.";
-                // Show an empty but valid model so the view renders
+                _logger.LogError(ex, "Failed to load home page products");
+                TempData["Error"] = "Could not load products. Please try again.";
                 return View(new HomeViewModel());
             }
         }
 
-        //Admin Dashboard
+        // Admin Dashboard
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminDashboard()
         {
@@ -53,39 +61,32 @@ namespace ABCRetailersST10356144.Controllers
                 var customers = await _api.GetCustomersAsync() ?? new List<Customer>();
                 var orders = await _api.GetOrdersAsync() ?? new List<Order>();
 
-                var model = new
-                {
-                    TotalCustomers = customers.Count,
-                    TotalPrders = orders.Count
-                };
+                ViewBag.TotalCustomers = customers.Count;
+                ViewBag.TotalOrders = orders.Count;
 
-                ViewBag.AdminSummary = model;
                 return View();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to load dashboard data from Functions API.");
+                _logger.LogError(ex, "Failed to load admin dashboard");
                 TempData["Error"] = "Could not load dashboard data. Please try again.";
-                // Show an empty but valid model so the view renders
                 return View();
             }
         }
 
-        //Customer Dashboard
+        // Customer Dashboard
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CustomerDashboard()
+        public IActionResult CustomerDashboard()
         {
             try
             {
-                var userEmail = User.Identity?.Name;
-                ViewBag.UserEmail = userEmail;
+                ViewBag.Username = User.Identity?.Name;
                 return View();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to load dashboard data from Functions API.");
+                _logger.LogError(ex, "Failed to load customer dashboard");
                 TempData["Error"] = "Could not load dashboard data. Please try again.";
-                // Show an empty but valid model so the view renders
                 return View();
             }
         }
@@ -94,7 +95,7 @@ namespace ABCRetailersST10356144.Controllers
         public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-            => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        public IActionResult Error() =>
+            View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

@@ -67,6 +67,12 @@
                                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDelete('@product.RowKey', '@product.ProductName')">
                                     <i class="fas fa-trash"></i>
                                 </button>
+
+                                <form asp-controller="Cart" asp-action="Add" asp-route-productID="@product.ProductID" method="post">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>

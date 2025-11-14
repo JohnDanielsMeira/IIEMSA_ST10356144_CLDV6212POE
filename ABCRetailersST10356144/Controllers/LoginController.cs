@@ -64,8 +64,9 @@ namespace ABCRetailersST10356144.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.Role, user.Role),
-                    new Claim("CustomerID", customer.CustomerID)
+                    new Claim("Username", user.Username),
+                    new Claim("CustomerID", customer.CustomerID),
+                    new Claim(ClaimTypes.Role, user.Role)
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

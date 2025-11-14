@@ -18,41 +18,38 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="collapse navbar-collapse" id="navbarNav">
+                    <!-- Home link based on role -->
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="fas fa-home"></i> Home
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Customer" asp-action="Index">
-                                <i class="fas fa-users"></i> Customers
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Index">
-                                <i class="fas fa-box"></i> Products
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Order" asp-action="Index">
-                                <i class="fas fa-shopping-cart"></i> Orders
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Upload" asp-action="Index">
-                                <i class="fas fa-upload"></i> Upload Files
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">
-                                <i class="fas fa-shield-alt"></i> Privacy
-                            </a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a class="nav-link" asp-controller="Home" asp-action="AdminDashboard">
+                                        <i class="fas fa-home"></i> Home
+                                    </a>
+                                }
+                                else if (User.IsInRole("Customer"))
+                                {
+                                    <a class="nav-link" asp-controller="Home" asp-action="CustomerDashboard">
+                                        <i class="fas fa-home"></i> Home
+                                    </a>
+                                }
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-home"></i> Home
+                                </a>
+                            </li>
+                        }
                     </ul>
 
-                    <!-- Login / Logout Section -->
+                    <!-- Login / Logout -->
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated)
                         {

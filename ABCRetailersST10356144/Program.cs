@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
-            builder.Services.AddHttpContextAccessor();
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 
 //EF Core: Azure SQL Database
 builder.Services.AddDbContext<AuthDbContext>(options =>
@@ -46,17 +46,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
     });
 
-//Session Setup
-builder.Services.AddSession(options =>
-{
-    options.Cookie.Name = "ABCSession";
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.Cookie.SameSite = SameSiteMode.Strict;
-});
+            //Session Setup
+            builder.Services.AddSession(options =>
+            {
+                options.Cookie.Name = "ABCSession";
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+            });
 
-builder.Services.Configure<FormOptions>(o =>
+            builder.Services.Configure<FormOptions>(o =>
             {
                 o.MultipartBodyLengthLimit = 50 * 1024 * 1024; // 50 MB
             });
@@ -81,8 +81,8 @@ builder.Services.Configure<FormOptions>(o =>
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-app.UseSession();
-app.UseAuthentication();
+            app.UseSession();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
